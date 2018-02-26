@@ -1,0 +1,34 @@
+#!/bin/sh
+set -e
+
+# put version string into file used @ configure time, see AC_INIT
+git describe --tags --always --dirty > VERSION
+
+# generate list of source files for use in Makefile.am
+# if you add new source files, you must run ./bootstrap again
+src_listvar () {
+    basedir=$1
+    suffix=$2
+    var=$3
+
+    find "${basedir}" -name "${suffix}" | LC_ALL=C sort | tr '\n' ' ' | (echo -n "${var} = " && cat)
+    echo ""
+}
+
+VARS_FILE=src_vars.mk
+AUTORECONF=${AUTORECONF:-autoreconf}
+
+echo "Generating file lists: ${VARS_FILE}"
+(
+  src_listvar "sysapi/sysapi" "*.c" "SYSAPI_C"
+  src_listvar "sysapi/include" "*.h" "SYSAPI_H"
+  src_listvar "sysapi/sysapi_util" "*.c" "SYSAPIUTIL_C"
+  printf "SYSAPI_SRC = \$(SYSAPI_H) \$(SYSAPI_C) \$(SYSAPIUTIL_C)\n"
+
+  src_listvar "common" "*.cpp" "COMMON_CXX"
+  src_listvar "common" "*.c" "COMMON_C"
+  src_listvar "common" "*.h" "COMMON_H"
+  printf "COMMON_SRC = \$(COMMON_C) \$(COMMON_CXX) \$(COMMON_H)\n"
+) > ${VARS_FILE}
+
+${AUTORECONF} --install --sym

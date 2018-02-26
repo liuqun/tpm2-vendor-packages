@@ -1,0 +1,2 @@
+CFLAGS="-O0 -ggdb3 -DDEBUG_SOCKETS"
+CXXFLAGS="-O0 -fno-operator-names -fpermissive -ggdb3 -DDEBUG -DDEBUG_SOCKETS"

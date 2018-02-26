@@ -1,0 +1,7 @@
+{
+    global:
+        InitSocketTcti;
+        PlatformCommand;
+    local:
+        *;
+};
