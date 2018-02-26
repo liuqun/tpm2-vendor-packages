@@ -31,6 +31,7 @@ install:
 
 script:
   # TODO: Add test scripts here
+  - echo "Done"
 
 after_failure:
   # TODO: Report failure infomation
