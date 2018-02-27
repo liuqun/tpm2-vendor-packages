@@ -24,8 +24,18 @@ install:
   - tar xJf autoconf-archive-2017.09.28.tar.xz && pushd autoconf-archive-2017.09.28
   - ./configure --prefix=/usr && make -j$(nproc) && sudo make install
   - popd
+  - pushd ibmswtpm2
+  - mkdir build
+  - pushd build
+  - tar xzf ../ibmtpm974.tar.gz
+  - sudo apt-get install -y libssl1.0-dev
+  - make -C src
+  - sudo mkdir -p /usr/local/bin
+  - sudo cp src/tpm_server /usr/local/bin
+  - popd # build
+  - popd # ibmswtpm2
   - pushd tpm2-tss
-  - ./bootstrap && ./configure && make -j$(nproc)
+  - ./bootstrap && ./configure --with-simulatorbin=/usr/local/bin/tpm_server && make -j$(nproc)
   - sudo make install
   - popd
 
