@@ -24,11 +24,15 @@ install:
   - tar xJf autoconf-archive-2017.09.28.tar.xz && pushd autoconf-archive-2017.09.28
   - ./configure --prefix=/usr && make -j$(nproc) && sudo make install
   - popd
+  - wget http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.0.0_1.0.2g-1ubuntu4.10_amd64.deb
+  - wget http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl-dev_1.0.2g-1ubuntu4.10_amd64.deb
+  - sha256sum libssl1.0.0_1.0.2g-1ubuntu4.10_amd64.deb | grep -q 99f550db61b0054715095fc77901280e81235900435f90b7db34af406f053832
+  - sha256sum libssl-dev_1.0.2g-1ubuntu4.10_amd64.deb | grep -q e44b09b81717a9ae86ff17adae1729682cb00b5285710e991f7b61c8a351c744
+  - sudo dpkg -i libssl1.0.0_1.0.2g-1ubuntu4.10_amd64.deb libssl-dev_1.0.2g-1ubuntu4.10_amd64.deb
   - pushd ibmswtpm2
   - mkdir build
   - pushd build
   - tar xzf ../ibmtpm974.tar.gz
-  - sudo apt-get install -y libssl1.0-dev
   - make -C src
   - sudo mkdir -p /usr/local/bin
   - sudo cp src/tpm_server /usr/local/bin
